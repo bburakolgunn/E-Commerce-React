@@ -1,18 +1,22 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon, Label, Menu, Table } from 'semantic-ui-react';
-import ProductService from '../services/productService';
+    import ProductService from '../services/productService';
 import { Link } from 'react-router-dom';
 
 
 export default function ProductList() {
 
-    const [products, setProducts] = useState([]) 
+    const [products, setProducts] = useState([])
     //lifecycle hook Benim products diye bir datam ve default değeri boş bir array
 
-    useEffect(()=>{ //Component yüklendiğinde yazılmasını istediğin kod buraya.
+    useEffect(() => { //Component yüklendiğinde yazılmasını istediğin kod buraya.
         let productService = new ProductService();
-       productService.getProducts().then(result=>setProducts(result.data.data))
-    },[])
+        productService.getProducts().then(result => {
+            console.log(result.data.data); // Görmek istersek 
+            setProducts(result.data.data);
+        });
+
+    }, [])
 
     return (
         <div>
@@ -28,15 +32,16 @@ export default function ProductList() {
                 </Table.Header>
                 <Table.Body>
                     {products.map((product) => (
-                            <Table.Row key={product.id}>
-                               <Table.Cell><Link to={`/products/${product.id}`}>{product.productName}</Link></Table.Cell>
-                                <Table.Cell>{product.unitPrice}</Table.Cell>
-                                <Table.Cell>{product.unitsInStock}</Table.Cell>
-                                <Table.Cell>{product.quantityPerUnit}</Table.Cell>
-                                <Table.Cell>{product.category.categoryName}</Table.Cell>
-                            </Table.Row>
-                        ))}
+                        <Table.Row key={product.id}>
+                            <Table.Cell><Link to={`/products/${product.productName}`}>{product.productName}</Link></Table.Cell>
+                            <Table.Cell>{product.unitPrice}</Table.Cell>
+                            <Table.Cell>{product.unitsInStock}</Table.Cell>
+                            <Table.Cell>{product.quantityPerUnit}</Table.Cell>
+                            <Table.Cell>{product.category.categoryName}</Table.Cell>
+                        </Table.Row>
+                    ))}
                 </Table.Body>
+
 
                 <Table.Footer>
                     <Table.Row>
@@ -60,3 +65,5 @@ export default function ProductList() {
         </div>
     )
 }
+
+
